@@ -1,0 +1,64 @@
+.sender{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 50px;
+    margin-left: 50px;
+    width: 40%;
+}
+
+
+.add{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 50%;
+    gap: 30px;
+}
+
+
+.sender button{
+    width: 100px;
+    height:40px;
+    border: inherit;
+    background-color: #00A2DC;
+    color: white;
+}
+
+.sender input, select{
+    border: 1px solid #e2e2e2;
+    height: 40px;
+    padding-left: 20px;
+}
+
+.sender textarea{
+    padding-left: 20px;
+    padding-top: 20px;
+}
+
+
+.file input{
+    width: 150px;
+    opacity: 1;
+    position: relative;
+    z-index: 2;
+}
+
+.file{
+    width: 100%;
+    padding: 3% 0%;
+    position: relative;
+    z-index: 2;
+}
+
+.file p{
+    position: absolute;
+    top: calc(100% - 36px);
+    z-index: -1;
+    font-size: 13px;
+}
+
+.sender h2{
+    font-size: 24px;
+    font-weight: 600;
+}

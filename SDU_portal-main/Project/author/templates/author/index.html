@@ -1,0 +1,115 @@
+{% load static %}
+{% comment %} {% load media %} {% endcomment %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <link rel="stylesheet" href="{% static 'author/css/all.css' %}">
+    <link rel="stylesheet" href="{% static 'author/css/main.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap" rel="stylesheet">
+
+    <title>The Index</title>
+</head>
+<body>
+
+  
+
+            {% if request.user.is_authenticated %}
+            <header class="header">
+                <h2>SDU BLOG</h2>
+                <div class="search">
+                     <input type="text" placeholder="Поиск по блогам">
+                     <span class="search2">
+                          <img src="{% static 'author/img/search3.svg' %}" alt="">
+                          <button>Find</button>
+                    </span>
+               </div>
+  
+               <span>
+                  <img src="{% static 'author/img/ava.jpg' %}" alt="">
+             </span>
+           </header>
+       
+          <section class="blogEnt">
+        <div class="left">
+            <span class="newBlog">
+                <p>My blogs</p>
+                <a href="{% url 'goNewBlog' %}">New blog</a>
+            </span>
+          <div class="blogs">
+
+          {% for dest in dests %}
+           <div class="blog-item">
+        <img src="media/{{ dest.img_url }}" alt="">
+        <span class="addition">
+        <h2> {{dest.title}} </h2>
+        <i onmouseover="showEdit(this)">
+        <img src="images/dots3.svg" alt="">
+        <p>Еще</p>
+        <l class="edit" id="edit">
+            <a href="${base_url+"/newBlog?id="+blogs[i].id}">Edit</a>
+            <a href="${base_url+ "/api/blog/delete?id="+blogs[i].id}">Delete</a>
+        </l>
+       </i>
+        </span>
+        <p>{{dest.description}}</p>
+
+         <span class="users">
+            <i>
+                <img src="" alt="">
+                20.12.2022
+            </i>
+            <i>
+               <img src="" alt="">
+               <p>21</p>
+           </i>
+
+           <i>
+               <img src="" alt="">
+               <p>7</p>
+           </i>
+
+           <i>
+               <img src="" alt="">
+               <p>Blog Name</p>
+           </i>
+
+           <i>
+               <img src="images/Vector.svg" alt="">
+              
+               <a href="">Alzhan Akh</a>
+           </i>
+        </span>
+      </div>
+     {% endfor %}
+              
+          </div>
+ 
+        </div>
+ 
+        <div class="prof">
+            <img src="{% static "author/img/ava.jpg" %}" alt="">
+            <h4>Alzhan Akhmetkerey</h4>
+            <p>В основном пишу про веб - разработку, на React & Redux</p>
+            <p>285 постов за все время</p>
+            <button>Edit</button>
+            
+            <a href="{% url 'logou1t' %}">Выход</a>
+        </div>
+ 
+       </section>
+            {% else %}
+               {% block content %}
+               {% endblock %}
+            {% endif %}
+  
+ <script src="{% static "author/js/index.js" %}"></script>
+</body>
+</html>

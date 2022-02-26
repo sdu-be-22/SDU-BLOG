@@ -1,0 +1,56 @@
+{% load static %}
+
+<html lang="en">
+<head>
+ 
+    <meta charset="UTF-8">
+
+    <link rel="stylesheet" href="{% static 'author/css/all.css' %}">
+    <link rel="stylesheet" href="{% static 'author/css/main.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap" rel="stylesheet">
+
+    <title>The Index</title>
+
+</head>
+<body>
+    <header class="header">
+        <h2>SDU BLOG</h2>
+        <div class="search">
+                <input type="text" placeholder="Поиск по блогам">
+                <span class="search2">
+                    <img src="{% static 'author/img/search3.svg' %}" alt="">
+                    <button>Find</button>
+            </span>
+        </div>
+
+        <span>
+            <img src="{% static 'author/img/ava.jpg' %}" alt="">
+        </span>
+     </header>
+
+    {% if form.errors %}
+<p>There's something wrong with what you entered!</p>
+{% endif %}
+    <section class="sender">
+    <h2>New Blog</h2>
+        <form action="{% url 'addBlog' %}" class="add" method="POST"  enctype="multipart/form-data">
+        {% csrf_token %}
+        {% comment %} <select name="category_id" id="category">
+            <option value="" disabled selected>Choose a category</option>   
+          </select> {% endcomment %}
+          <button class="file" type="button">
+              <p>Choose an image</p>
+          </button>
+             {{ form.img_url }}
+             {{ form.title }}
+             {{ form.description }}
+          <button type="submit">Enter</button>
+        </form>
+    </section>
+</body>
+</html>

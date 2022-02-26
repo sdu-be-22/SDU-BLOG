@@ -1,0 +1,60 @@
+{% comment %} {% extends 'author/index.html' %}
+
+{% block content %} {% endcomment %}
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <link rel="stylesheet" href="{% static 'author/css/all.css' %}">
+    <link rel="stylesheet" href="{% static 'author/css/main.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap" rel="stylesheet">
+
+    <title>The Index</title>
+</head>
+
+<body>
+{% if form.errors %}
+<p>There's something wrong with what you entered!</p>
+{% endif %}
+
+{% if next %}
+<p>Hey, you can't access that page.</p>
+{% endif %}
+<header class="header">
+        <h2>SDU BLOG</h2>
+        <div class="search">
+            <input type="text" placeholder="Поиск по блогам">
+            <span class="search2">
+                <img src="{% static 'author/img/search3.svg' %}" alt="">
+                <button>Find</button>
+            </span>
+        </div>
+  
+        <div class="buttons">
+            <a  href="">Login</a>
+            <a  href="" >Registration</a>
+        </div>
+</header>
+<div class="login">
+<form method="post" action="{% url 'login' %}" class="form" >
+    {% csrf_token %}
+
+    <p>Username: {{ form.username }}</p>
+    <p>Password: {{ form.password }}</p>
+
+    <input type="submit"  value="log in" class="btn-submit" >
+    <input type="hidden" name="next" value="{{ next }}">
+</form> 
+</div>
+</body>
+</html>
+
+
+
+
