@@ -1,4 +1,5 @@
-import re
+
+from urllib import request
 from django.contrib.auth import logout, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
@@ -7,14 +8,28 @@ from django.core.paginator import Paginator
 from django.http import HttpResponse, HttpResponseNotFound, Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
-from django.views.generic import ListView, DetailView, CreateView, TemplateView, FormView
+from django.views.generic import ListView, DetailView, CreateView, TemplateView, FormView,DeleteView,UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import  render, redirect
+from .forms import NewUserForm
+from django.contrib.auth import login
+from django.contrib import messages
 
 from .forms import *
 from .models import *
 from .utils import *
 
-
+def register_request(request):
+	if request.method == "POST":
+		form = NewUserForm(request.POST)
+		if form.is_valid():
+			user = form.save()
+			login(request, user)
+			messages.success(request, "Registration successful." )
+			return redirect('register')
+		messages.error(request, "Unsuccessful registration. Invalid information.")
+	form = NewUserForm()
+	return render (request=request, template_name="registration/register.html", context={"register_form":form})
 
 class LoginUser(DataMixin, LoginView):
     form_class = LoginUserForm
@@ -37,6 +52,12 @@ def index(request):
     dests = Blogs.objects.all()
     return render(request, 'author/index.html', {'dests': dests})
 
+def profile(request, author_id):
+    author = User.objects.get(username=author_id).pk
+    dests = Blogs.objects.filter(author_id=author)
+    adam = dests[0].author_id
+    return render(request, 'author/profile.html', {'dests': dests,  'adam':adam})
+
 
 def openBlog(request):
     print("here")
@@ -45,26 +66,30 @@ def openBlog(request):
 
 
 class BlogView(FormView):
-    template_name = 'author/newBlog.html'
+    template_name = '/author/newBlog.html'
     form_class = BlogForm
+    success_url = '/'
 
-    def get(self, request):
-        form = BlogForm()
-        return render(request, self.template_name, {'form': form})
+    def form_valid(self, form):
+        # This method is called when valid form data has been POSTed.
+        # It should return an HttpResponse.
 
-    def post(self,request):
-        
-        form = BlogForm(request.POST,request.FILES)
-        
-        print(form.is_valid())
-        if form.is_valid():
-            blog = form.save(commit=True)
-            print('something')
-            dests = Blogs.objects.all()
-            return render(request, 'author/index.html', {'dests': dests})
+        # perform a action here
+        form.create_obj(self.request.user)
+        return super().form_valid(form)
 
-        args = {'form':form}
-        return render(request, self.template_name, args)
+
+def deleteBlog(request,pk):
+    form = Blogs.objects.get(id=pk)
+    form.delete()
+    return redirect('/')
+
+class EditBlogView(UpdateView):
+    model = Blogs
+    template_name = 'author/editBlog.html'
+    fields = ['title','description','img_url','date']
+
 
    
         
+

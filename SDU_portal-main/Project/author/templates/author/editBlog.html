@@ -1,0 +1,16 @@
+
+{% extends 'author/head.html' %}
+ {% block content %}
+  
+ 
+     <div class="group">
+        <form  class="form" method="POST" >
+            {% csrf_token %}  
+                 {{ form.as_p }}
+                  
+              <button class="btn btn-secondary">Enter</button>
+            </form>
+    </div>
+
+    {% endblock %}
+

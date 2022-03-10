@@ -1,14 +1,51 @@
-<head>
-    <meta charset="UTF-8">
 
-    <link rel="stylesheet" href="{% static 'author/css/all.css' %}">
-    <link rel="stylesheet" href="{% static 'author/css/main.css' %}">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@700&display=swap" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap" rel="stylesheet">
 
-    <title>The Index</title>
-</head>
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+    
+        <link rel="stylesheet" href="{% static 'author/css/all.css' %}">
+        <!-- <link rel="stylesheet" href="{% static 'author/css/main.css' %}"> -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@700&display=swap" rel="stylesheet">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap" rel="stylesheet">
+        <script src='http://code.jquery.com/jquery-2.1.1.min.js'></script>
+        <link rel="stylesheet" href="{% static 'author/js/index.js' %}">
+    </head>
+<body>
+    <header class="header">
+        <a href="{% url 'index' %}">SDU BLOG</a>
+        <div class="search">
+             <input type="text" placeholder="Поиск по блогам">
+             <span class="search2">
+                  <img src="{% static 'author/img/search3.svg' %}" alt="">
+                  <button>Find</button>
+            </span>
+       </div>
+       {% if request.user.is_authenticated %}
+       <span>
+          <a href="{% url 'profile' request.user %}"><img src="{% static 'author/img/ava.jpg' %}" alt=""></a>
+     </span>
+     {% else %}
+     <div class="buttons">
+        <a href="{% url 'login' %}">Login</a>
+        <a href="{% url 'register' %}">Registration</a>
+    </div>
+     {% endif %}
+   </header>
+
+   {% block content %}
+
+
+   {% endblock %}
+
+   <script src="{% static "author/js/index.js" %}"></script>
+</body>
+</html>
+

@@ -1,0 +1,20 @@
+.Registration {
+    color: black;
+    background-color: #00A2DC;
+    text-align: center;
+    font-size: xx-large;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+.btn {
+    width: 150px;
+    background-color: blue;
+    color: white;
+}
+
+.contain {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+}
