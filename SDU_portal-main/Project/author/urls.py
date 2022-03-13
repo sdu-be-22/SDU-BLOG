@@ -15,9 +15,10 @@ urlpatterns = [
     path('logou1t/', views.logout_user, name='logou1t'),
     path('openBlog/', views.openBlog, name='goNewBlog'),
     path('/', BlogView.as_view(), name='addBlog'),
-    path('openBlog/edit/<int:pk>', EditBlogView.as_view(), name = 'editBlogs'),
+    path('openBlog/edit/<str:pk>', views.EditBlogView, name = 'editBlogs'),
     path('deleteBlog/<str:pk>', views.deleteBlog, name = 'deleteBlog'),
     path('register', views.register_request, name='register'),
+    path('search', views.search, name='searching'),
 ] 
 urlpatterns += static(settings.MEDIA_URL,
                           document_root=settings.MEDIA_ROOT)

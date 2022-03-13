@@ -1,0 +1,48 @@
+{% extends 'author/head.html' %}
+
+{% block content %}
+
+<section class="blogEnt">
+    <div class="left">
+        <div class="blogs">
+         {% if searched %}  
+           {% for blog in blogs %}
+    
+           <div class="blog-item">
+        <img src="media/{{ blog.img_url }}" alt="">
+        <span class="addition">
+        <h2> {{blog.title}} </h2>
+        <i onmouseover="showEdit(this)">
+        <img src="images/dots3.svg" alt="">
+        <p>Еще</p>
+        <l class="edit" id="edit">
+            <a href="{% url 'editBlogs' blog.pk %}">Edit</a> 
+            <a href="{% url 'deleteBlog' blog.id %}">Delete</a>
+        </l>
+       </i>
+        </span>
+        <p>{{blog.description}}</p>
+
+         <span class="users">
+            <i>
+                <img src="" alt="">
+                {{blog.date}}
+            </i>
+           <i>
+               <img src="images/Vector.svg" alt="">
+              
+               <a href="">Alzhan Akh</a>
+           </i>
+        </span>
+      </div>
+            </div>
+    </div>
+</section>
+                     
+{% endfor %}
+{% elif form.error %}
+ 
+<h1>Dzhai</h1>
+ 
+ {% endif %}
+{% endblock %}

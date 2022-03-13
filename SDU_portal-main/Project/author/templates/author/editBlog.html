@@ -3,14 +3,30 @@
  {% block content %}
   
  
-     <div class="group">
-        <form  class="form" method="POST" >
-            {% csrf_token %}  
-                 {{ form.as_p }}
-                  
-              <button class="btn btn-secondary">Enter</button>
-            </form>
-    </div>
+ <section class="sender">
+  <div class="group">
+   <form action="" class="add" method="POST"  enctype="multipart/form-data">
+     {% csrf_token %}
+       <label for="" class="form-label" >Title</label>
+       <input type="text" required name="title" value="{{ blog.title }}" class="form-control">
+       <label for="" class="form-label" >Category</label>
+       <select name="" id=""> 
+     
+        <option value="">{{ blog.category }}</option>
+        <!-- Here should be select(HTML by category) -->
+       </select> 
+         <label for="" class="form-label" >Description</label>
+        <input type="text" required name="description" value="{{ blog.description }}" class="form-control">
+
+        {% if blog.img_url %}
+        <img src="{{ blog.img_url.url }}" alt="">
+        {% endif %}
+         <label for="" class="form-label"  >Image</label>
+        <input type="file"  name="image" class="form-control">
+       <button type="submit">Enter</button>
+     </form>
+   </section>
+ </div>
 
     {% endblock %}
 

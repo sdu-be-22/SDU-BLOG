@@ -14,7 +14,7 @@ from django.shortcuts import  render, redirect
 from .forms import NewUserForm
 from django.contrib.auth import login
 from django.contrib import messages
-
+import os
 from .forms import *
 from .models import *
 from .utils import *
@@ -71,25 +71,52 @@ class BlogView(FormView):
     success_url = '/'
 
     def form_valid(self, form):
-        # This method is called when valid form data has been POSTed.
-        # It should return an HttpResponse.
-
-        # perform a action here
         form.create_obj(self.request.user)
         return super().form_valid(form)
 
 
 def deleteBlog(request,pk):
     form = Blogs.objects.get(id=pk)
+    if len(form.img_url) > 0:
+                os.remove(form.img_url.path)
     form.delete()
     return redirect('/')
 
-class EditBlogView(UpdateView):
-    model = Blogs
-    template_name = 'author/editBlog.html'
-    fields = ['title','description','img_url','date']
+def EditBlogView(request,pk):
+    blog = Blogs.objects.get(id=pk)
 
+    if request.method == "POST":
+        if len(request.FILES) != 0:
+            if len(blog.img_url) > 0:
+                os.remove(blog.img_url.path)
+            blog.img_url = request.FILES['image']
+        blog.title = request.POST.get('title')
+        blog.description = request.POST.get('description')
+        blog.save()
+        messages.success(request, "Succ")   
+        return redirect('profile', blog.author_id)
 
+    context ={'blog':blog}
+    return render(request,'author/editBLog.html',context)
+   
+
+def search(request):
+        searched = request.GET.get('searched')
+        
+        if request.method == "POST":
+            searched = request.POST['searched']
+            blogs = Blogs.objects.filter(title__contains=searched)     
+        
+            return render(request,
+                'author/search.html',
+                {'searched':searched,
+                  'blogs':blogs})
+        elif request.method == "POST":
+            searched = request.POST['searched']
+            blogs = Blogs.objects.filter(title__contains!=searched)     
+        
+            return render(request,
+            'author/search.html')
    
         
 

@@ -22,12 +22,15 @@
     <header class="header">
         <a href="{% url 'index' %}">SDU BLOG</a>
         <div class="search">
-             <input type="text" placeholder="Поиск по блогам">
-             <span class="search2">
-                  <img src="{% static 'author/img/search3.svg' %}" alt="">
-                  <button>Find</button>
-            </span>
-       </div>
+            <form  method="POST" action="{% url 'searching' %}">
+                {% csrf_token %}
+           <input type="text" placeholder="Поиск по блогам" name="searched">
+           <span class="search2">
+                <img src="{% static 'author/img/search3.svg' %}" alt="">
+                <button class="btn btn-outline-secondary" type="submit">Find</button>
+          </span>
+      </form>
+     </div>
        {% if request.user.is_authenticated %}
        <span>
           <a href="{% url 'profile' request.user %}"><img src="{% static 'author/img/ava.jpg' %}" alt=""></a>
@@ -39,12 +42,11 @@
     </div>
      {% endif %}
    </header>
-
+  
    {% block content %}
-
-
+ 
    {% endblock %}
-
+   
    <script src="{% static "author/js/index.js" %}"></script>
 </body>
 </html>
