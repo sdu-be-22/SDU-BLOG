@@ -14,7 +14,11 @@ from django.shortcuts import  render, redirect
 from .forms import NewUserForm
 from django.contrib.auth import login
 from django.contrib import messages
+<<<<<<< HEAD
 import os
+=======
+from django.core.paginator import Paginator
+>>>>>>> 577c783 (new Changes)
 from .forms import *
 from .models import *
 from .utils import *
@@ -30,6 +34,11 @@ def register_request(request):
 		messages.error(request, "Unsuccessful registration. Invalid information.")
 	form = NewUserForm()
 	return render (request=request, template_name="registration/register.html", context={"register_form":form})
+
+
+class ContactListView(ListView):
+    paginate_by = 2
+    model = Blogs
 
 class LoginUser(DataMixin, LoginView):
     form_class = LoginUserForm
@@ -50,7 +59,11 @@ def logout_user(request):
 
 def index(request):
     dests = Blogs.objects.all()
-    return render(request, 'author/index.html', {'dests': dests})
+    paginator = Paginator(dests, 2) # Show 25 contacts per page.
+
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'author/index.html', {'page_obj': page_obj})
 
 def profile(request, author_id):
     author = User.objects.get(username=author_id).pk
