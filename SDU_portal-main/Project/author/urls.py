@@ -10,6 +10,7 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('', views.index, name='index'),
+    path('/<int:pk>', views.index, name='index'),
     path('profile/<str:author_id>', views.profile, name='profile'),
     path('', LoginUser.as_view(), name='login'),
     path('logou1t/', views.logout_user, name='logou1t'),

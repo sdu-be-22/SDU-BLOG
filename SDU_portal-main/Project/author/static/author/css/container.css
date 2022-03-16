@@ -3,3 +3,13 @@
     display: flex;
     justify-content: space-between;
 }
+
+.pagination{
+    margin-top: 100px;
+}
+
+.pagination a{
+    text-decoration: none;
+    font-size: 16px;
+    color: #00A2DC;
+}
