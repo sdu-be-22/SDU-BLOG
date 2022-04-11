@@ -3,22 +3,27 @@ from urllib import request
 from django.contrib.auth import logout, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LoginView, PasswordChangeView
 from django.core.paginator import Paginator
-from django.http import HttpResponse, HttpResponseNotFound, Http404
+from django.http import HttpResponse, HttpResponseNotFound,HttpResponseRedirect, Http404, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, CreateView, TemplateView, FormView,DeleteView,UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import  render, redirect
 from .forms import NewUserForm
+from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import login
 from django.contrib import messages
-<<<<<<< HEAD
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
+from django.utils.decorators import method_decorator
+from django.views import View
 import os
-=======
+from django.contrib.auth import update_session_auth_hash
+
 from django.core.paginator import Paginator
->>>>>>> 577c783 (new Changes)
+
 from .forms import *
 from .models import *
 from .utils import *
@@ -58,18 +63,54 @@ def logout_user(request):
 
 
 def index(request):
-    dests = Blogs.objects.all()
+    category_id = request.GET.get('category')
+    if(category_id):
+       dests = Blogs.objects.filter(category = category_id)
+    else:
+       dests = Blogs.objects.all()
     paginator = Paginator(dests, 2) # Show 25 contacts per page.
-
+    # stuff = get_object_or_404(Blogs,id=self.kwargs['pk'])
+    # total_likes = stuff.total_likes()
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    return render(request, 'author/index.html', {'page_obj': page_obj})
+    category = Category.objects.all()
+    context = {'page_obj': page_obj, "category":category}
+    return render(request, 'author/index.html', context)
+
+
+def BlogPostLike(request, pk):
+    post = get_object_or_404(Blogs, id=request.POST.get('blogpost_id'))
+    if post.likes.filter(id=request.user.id).exists():
+        post.likes.remove(request.user)
+    else:
+        post.likes.add(request.user)
+
+    return HttpResponseRedirect(reverse('blogpost_like', args=[str(pk)]))
+
+class BlogPostDetailView(DetailView):
+    model = Blogs
+         
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+
+        likes_connected = get_object_or_404(BlogPost, id=self.kwargs['pk'])
+        liked = False
+        if likes_connected.likes.filter(id=self.request.user.id).exists():
+            liked = True
+        data['number_of_likes'] = likes_connected.number_of_likes()
+        data['post_is_liked'] = liked
+        return data   
 
 def profile(request, author_id):
     author = User.objects.get(username=author_id).pk
     dests = Blogs.objects.filter(author_id=author)
-    adam = dests[0].author_id
-    return render(request, 'author/profile.html', {'dests': dests,  'adam':adam})
+    # adam = dests[0].author_id
+    try:
+        adam = author
+        context = {'dests': dests, 'adam': adam}
+    except IndexError:
+        context ={'dests': dests, 'adam': author}
+    return render(request, 'author/profile.html', context)
 
 
 def openBlog(request):
@@ -79,7 +120,7 @@ def openBlog(request):
 
 
 class BlogView(FormView):
-    template_name = '/author/newBlog.html'
+    template_name = 'author/newBlog.html'
     form_class = BlogForm
     success_url = '/'
 
@@ -128,8 +169,75 @@ def search(request):
             searched = request.POST['searched']
             blogs = Blogs.objects.filter(title__contains!=searched)     
         
-            return render(request,
-            'author/search.html')
-   
-        
+            return render(request,'author/search.html')
+
+def save_comment(request):
+    if request.method == 'POST':
+        comment = request.POST['comment']
+        postid = request.POST['postid']
+        blog = Blogs.objects.get(pk=postid)
+        user = request.user
+
+        Comment.objects.create(
+            user = user,
+            post = blog,
+            body = comment
+        )
+    
+    return JsonResponse({'bool':True})
+
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class ProfileView(View):
+    profile = None
+
+    def dispatch(self, request, *args, **kwargs):
+        self.profile, __ = ProfileInfo.objects.get_or_create(user=request.user)
+        return super(ProfileView, self).dispatch(request, *args, **kwargs)
+
+    def get(self, request):
+        context = {'profile': self.profile, 'segment': 'profile'}
+        return render(request, 'author/profile_info.html', context)
+
+    def post(self, request):
+        form = ProfileForm(request.POST, request.FILES, instance=self.profile)
+        profile = ProfileInfo(user=request.user)
+        if form.is_valid():
+            form.first_name = request.POST.get('first_name')
+            form.last_name = request.POST.get('last_name')
+            form.bio = request.POST.get('bio')
+
+            form.img_pro = request.POST.get('img_pro')
+            form.birthday = request.POST.get('birthday')
+            form.phone_num  = request.POST.get('phone_num')
+            form.city = request.POST.get('city')
+            form.address = request.POST.get('address')
+           
+            profile = form.save()
+            profile.user.save()
+
+            messages.success(request, 'Profile saved successfully')
+        else:
+            messages.error(request, form_validation_error(form))
+        return redirect('profile-info')
+
+
+
+@login_required
+def change_password(request):
+    
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important!
+            messages.success(request, 'Your password was successfully updated!')
+            return redirect('change_password')
+        else:
+            messages.error(request, 'Please correct the error below.')
+    else:
+        form = PasswordChangeForm(request.user)
+    return render(request, 'author/password_change.html', {
+        'form': form
+    })
 

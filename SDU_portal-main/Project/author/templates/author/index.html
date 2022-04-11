@@ -2,20 +2,14 @@
 
 {% load static %}
  {% comment %} {% load media %} {% endcomment %}
-
-  
     {% block content %}
 
           <section class="blogEnt">
         <div class="left">
         <h1 class="headTitle">Here you can see all blogs of all users!!!!<h1>
           <div class="blogs">
-
-<<<<<<< HEAD
-          <!-- {% for dest in dests %} -->
-=======
           {% for dest in page_obj %}
->>>>>>> 577c783 (new Changes)
+
            <div class="blog-item">
         <img src="media/{{ dest.img_url }}" alt="">
         <span class="addition">
@@ -29,84 +23,56 @@
                 {{dest.date}}
             </i>
              <i>
-               <img src="{% static "author/img/eye.svg" %}" alt="">
-               <p>21</p>
-           </i>
-
+               <!-- <img src="{% static "author/img/eye.svg" %}" alt="">
+               <p>21</p> -->
+        
+              </i>
            <i>
-               <img src="{% static "author/img/Shape.svg" %}" alt="">
-               <p>7</p>
+               <img src="{% static 'author/img/Shape.svg' %}" alt="">
+               <p></p>
            </i> 
+           <i>
+            <img src="{% static 'author/img/like.png' %}" alt="">
+            <p>{{ dest.likes.count }}</p>
+        </i> 
             <i>
                <img src="{% static "author/img/Fill.svg" %}" alt="">
                <p>{{ dest.category }}</p>
            </i> 
-
            <i>
                <img src="{% static "author/img/Vector.svg" %}" alt="">
-          
-               
                <a href="{% url 'profile' dest.author_id %}">{{ dest.author_id }}</a>
-         
-             
-               <!-- Here should be watch other page -->
-    
-               
            </i>
-          
         </span>
       </div>
-     <!-- {% endfor %} -->
-              
-          </div>
-<<<<<<< HEAD
- 
-        </div>    {% comment %} 
-        {% if request.user.is_authenticated %}
-    
-        <div class="prof">
-=======
+    </div>
+  
+        {% endfor %}
+
+        <div class="categories">
+          <h2>Category</h2>
+           {% for item in category %}
+             <a href="?category={{ item.name }}">{{ item.name }}</a>
+           {% endfor %}
+      </div>
+
+      
      <div class="pagination">
           <span class="step-links">
               {% if page_obj.has_previous %}
                 <a href="?page=1">&laquo; first</a>
-                <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                <a href="?page={{ page_obj.previous_page_number }}&category={{ dest.category }}">previous</a>
            {% endif %}
            {% if page_obj.has_next %}
-              <a href="?page={{ page_obj.next_page_number }}">next</a>
-              <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+              <a href="?page={{ page_obj.next_page_number }}&category={{ dest.category }}">next</a>
+              <a href="?page={{ page_obj.paginator.num_pages }}&category={{ dest.category }}">last &raquo;</a>
           {% endif %}
       </span>
-      </div>
-        </div>
- 
-        {% comment %} <div class="prof">
->>>>>>> 577c783 (new Changes)
-            <img src="{% static "author/img/ava.jpg" %}" alt="">
-            <h4>Alzhan Akhmetkerey</h4>
-            <p>В основном пишу про веб - разработку, на React & Redux</p>
-            <p>285 постов за все время</p>
-            <button>Edit</button>
-            
-            <a href="{% url 'logou1t' %}">Выход</a>
-<<<<<<< HEAD
-        </div> 
-     
-        {% endif %}
-        {% endcomment %}
-       </section>
+  </div>
        
-   
-=======
-        </div> {% endcomment %}
-     
-       </section>
-       
-    
-             
-            {% endif %}
->>>>>>> 577c783 (new Changes)
-  
-            {% endblock %}
+
+      
+    </section>
+     {% endblock %}
  <script src="{% static "author/js/index.js" %}"></script>
 

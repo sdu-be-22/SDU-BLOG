@@ -1,12 +1,12 @@
 from fileinput import FileInput
 from logging import PlaceHolder
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm
 from django.forms import ImageField, ModelForm, TextInput, Textarea
 from django.contrib.auth.models import User
 
 # from Project import author
-from .models import Blogs, Category
+from .models import Blogs, Category,Comment, ProfileInfo
 from django.core.exceptions import ValidationError
 
 from .models import *
@@ -43,7 +43,14 @@ class BlogForm(forms.ModelForm):
         
 
             
-        
+class CommentForm(forms.ModelForm): 
+    class Meta:
+        model = Comment
+        fields = ('body',)
+        widget = {
+            'body': forms.Textarea(attrs={'class': 'form-control', 'placeHolder': 'Write Comment'}),
+        }
+
         
 class NewUserForm(UserCreationForm):
     email= forms.EmailField(required=True)
@@ -64,3 +71,25 @@ def __init__(self, *args, **kwargs):
     self.fields['email'].widget.attrs['class'] = 'form-control'
     self.fields['password1'].widget.attrs['class'] = 'form-control'
     self.fields['password2'].widget.attrs['class'] = 'form-control'
+
+
+
+class ProfileForm(forms.ModelForm):
+    first_name = forms.CharField(max_length=255)
+    last_name = forms.CharField(max_length=255)
+  
+
+    class Meta:
+        model = ProfileInfo
+        fields = '__all__'
+        exclude = ['user']
+
+
+class PasswordChangingForm(PasswordChangeForm):
+    old_password = forms.CharField(widget=forms.PasswordInput())
+    new_password1 = forms.CharField(widget=forms.PasswordInput())
+    new_password2 = forms.CharField(widget=forms.PasswordInput())
+
+    class Meta:
+        model = User
+        fields = ('old_password', 'new_password1', 'new_password2',)
