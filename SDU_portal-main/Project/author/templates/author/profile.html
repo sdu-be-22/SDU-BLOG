@@ -8,14 +8,14 @@
            
 <section class="blogEnt">
         <div class="left"> 
-        {% if user.id == adam%}
+        {% if user.id == adam %}
             <span class="newBlog">
                 <p>My blogs</p>
                 <a href="{% url 'goNewBlog' %}">New blog</a>
             </span>
         {% endif %}
+        <div class="blogs">
     {% for dest in dests %}
-          <div class="blogs">
         <div class="blog-item">
         <img src="../media/{{ dest.img_url }}" alt="">
         <span class="addition">
@@ -80,14 +80,14 @@
           </div>
         </div>
         {% endif %}
-    </div>
-{% endfor %}
-</div>
-    </div>
-    </div>
+{% endfor %} 
 </div>
 </div>
-     {% if user.id == adam.id %}
+    </div>
+    </div>
+</div>
+</div>
+     {% if user.id == adam %}
         <div class="prof">
             <img src="{% static "author/img/ava.jpg" %}" alt="">
             <h4> {{ adam.first_name }} {{ adam.last_name }}</h4>

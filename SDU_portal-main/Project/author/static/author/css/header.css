@@ -67,3 +67,13 @@ color: white;
 border: inherit;
 border-radius: 5px;
 }
+
+.save{
+    border: none;
+    border-radius: 0%;
+}
+
+.save>img{
+    border-radius: 0% !important;
+    width: 30px !important;
+}

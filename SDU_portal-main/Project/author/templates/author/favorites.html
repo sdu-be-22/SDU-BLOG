@@ -6,12 +6,12 @@
 
           <section class="blogEnt">
         <div class="left">
-        <h1 class="headTitle">Here you can see all blogs of all users!!!!<h1>
+        <h1 class="headTitle">Here you can see saved blogs of yours!!!!<h1>
           <div class="blogs">
-          {% for dest in page_obj %}
+          {% for dest in dests%}
 
            <div class="blog-item">
-        <img src="media/{{ dest.img_url }}" alt="">
+        <img src="/media/{{ dest.img_url }}" alt="Great">
         <span class="addition">
         <h2> {{dest.title}} </h2>
         </span>
@@ -44,39 +44,13 @@
                <a href="{% url 'profile' dest.author_id %}">{{ dest.author_id }}</a>
            </i>
             <i>
-                <img src="{% static 'author/img/saved.svg' %}">
-               <a href="{% url 'favorite_add' dest.id %}">Save</a>
+               <a href="{% url 'favorite_add' dest.id %}"><img src="{% static "author/img/Vector.svg" %}" alt=""></a>
            </i>
         </span>
-      </div>
-    </div>
-  
+      </div>  
         {% endfor %}
+         </div>
+    </div>
+</section>
 
-        <div class="categories">
-          <h2>Category</h2>
-           {% for item in category %}
-             <a href="?category={{ item.name }}">{{ item.name }}</a>
-           {% endfor %}
-      </div>
-
-      
-     <div class="pagination">
-          <span class="step-links">
-              {% if page_obj.has_previous %}
-                <a href="?page=1">&laquo; first</a>
-                <a href="?page={{ page_obj.previous_page_number }}&category={{ dest.category }}">previous</a>
-           {% endif %}
-           {% if page_obj.has_next %}
-              <a href="?page={{ page_obj.next_page_number }}&category={{ dest.category }}">next</a>
-              <a href="?page={{ page_obj.paginator.num_pages }}&category={{ dest.category }}">last &raquo;</a>
-          {% endif %}
-      </span>
-  </div>
-       
-
-      
-    </section>
-     {% endblock %}
- <script src="{% static "author/js/index.js" %}"></script>
-
+{% endblock %}

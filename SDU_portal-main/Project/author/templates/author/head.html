@@ -39,6 +39,7 @@
      </div>
        {% if request.user.is_authenticated %}
        <span>
+          <a href="{% url 'favorite_list' %}" class="save"><img src="{% static 'author/img/save.svg' %}"></a>
           <a href="{% url 'profile' request.user %}"><img src="{% static 'author/img/ava.jpg' %}" alt=""></a>
      </span>
      {% else %}

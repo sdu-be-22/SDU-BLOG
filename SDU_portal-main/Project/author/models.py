@@ -4,6 +4,7 @@ from django.db import models
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext as _
+
 # Create your models here.
 class Category(models.Model):
     name = models.CharField(max_length=255)
@@ -22,6 +23,7 @@ class Blogs(models.Model):
     date = models.DateTimeField(default=timezone.now)
     category = models.CharField(max_length=255, default='none')
     likes = models.ManyToManyField(User, related_name='blogpost_like')
+    favorites = models.ManyToManyField(User, related_name="favorites", blank=True, default=None)
     blog_views = models.IntegerField(default=0, null=True)
     
     def number_of_likes(self):

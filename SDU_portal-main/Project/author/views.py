@@ -1,32 +1,30 @@
 
+import os
 from urllib import request
-from django.contrib.auth import logout, login
+
+from django.contrib import messages
+from django.contrib.auth import login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView, PasswordChangeView
 from django.core.paginator import Paginator
-from django.http import HttpResponse, HttpResponseNotFound,HttpResponseRedirect, Http404, JsonResponse
-from django.shortcuts import render, redirect, get_object_or_404
-from django.urls import reverse_lazy, reverse
-from django.views.generic import ListView, DetailView, CreateView, TemplateView, FormView,DeleteView,UpdateView
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import  render, redirect
-from .forms import NewUserForm
-from django.contrib.auth.forms import PasswordChangeForm
-from django.contrib.auth import login
-from django.contrib import messages
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
+from django.http import (Http404, HttpResponse, HttpResponseNotFound,
+                         HttpResponseRedirect, JsonResponse)
+from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views import View
-import os
-from django.contrib.auth import update_session_auth_hash
+from django.views.generic import (CreateView, DeleteView, DetailView, FormView,
+                                  ListView, TemplateView, UpdateView)
 
-from django.core.paginator import Paginator
+import author
 
 from .forms import *
+from .forms import NewUserForm
 from .models import *
 from .utils import *
+
 
 def register_request(request):
 	if request.method == "POST":
@@ -104,7 +102,6 @@ class BlogPostDetailView(DetailView):
 def profile(request, author_id):
     author = User.objects.get(username=author_id).pk
     dests = Blogs.objects.filter(author_id=author)
-    # adam = dests[0].author_id
     try:
         adam = author
         context = {'dests': dests, 'adam': adam}
@@ -240,4 +237,22 @@ def change_password(request):
     return render(request, 'author/password_change.html', {
         'form': form
     })
+
+@login_required
+def favorite_list(request):
+    new = Blogs.objects.filter(favorites = request.user)
+    print(new)
+    return render(request, 'author/favorites.html', {'dests': new})
+
+
+
+@login_required
+def favorite_add(request, id):
+    blog = get_object_or_404(Blogs, id=id)
+    # print(blog)
+    if blog.favorites.filter(id = request.user.id).exists():
+        blog.favorites.remove(request.user)
+    else:
+        blog.favorites.add(request.user)
+    return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
