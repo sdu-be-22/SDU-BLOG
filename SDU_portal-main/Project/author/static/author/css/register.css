@@ -1,9 +1,18 @@
+.contain{
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
 .Registration {
-    color: black;
-    background-color: #00A2DC;
+    color: #00A2DC;
     text-align: center;
     font-size: xx-large;
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-family: 'Roboto', sans-serif;
+    letter-spacing: 1px;
 }
 
 .btn {

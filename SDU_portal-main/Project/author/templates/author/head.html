@@ -27,16 +27,16 @@
 <body>
     <header class="header">
         <a href="{% url 'index' %}">SDU BLOG</a>
-        <div class="search">
-            <form  method="POST" action="{% url 'searching' %}">
+        <div>
+            <form  method="POST"  class="search" action="{% url 'searching' %}">
                 {% csrf_token %}
            <input type="text" placeholder="Поиск по блогам" name="searched">
            <span class="search2">
                 <img src="{% static 'author/img/search3.svg' %}" alt="">
-                <button class="btn btn-outline-secondary" type="submit">Find</button>
+                <button class="btn1 btn-outline-secondary" type="submit">Find</button>
           </span>
       </form>
-     </div>
+     </div> 
        {% if request.user.is_authenticated %}
        <span>
           <a href="{% url 'favorite_list' %}" class="save"><img src="{% static 'author/img/save.svg' %}"></a>

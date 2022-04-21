@@ -9,8 +9,8 @@
 .header>a{
 font-family: 'Roboto', sans-serif;
 color:#00A2DC;
-font-size: 24px;
-font-weight: 600;
+font-size: 30px;
+font-weight: 700;
 text-decoration: none;
 }
 
@@ -27,14 +27,13 @@ text-decoration: none;
 
 .search input{
     border:1px solid #e2e2e2;
-    padding: 10px 5px;
+    padding: 9px 5px;
 }
 
 .search2{
     display: flex;
-    align-items: center;
     background-color: #00A2DC;
-    padding: 10px 5px;
+    padding: 9px 5px;
 }
 
 .search2 img{
@@ -48,6 +47,11 @@ text-decoration: none;
     border:inherit;
     color: white;
     letter-spacing: 3px;
+}
+
+.btn1{
+  display: flex;
+  align-items: center;
 }
 
 .buttons{

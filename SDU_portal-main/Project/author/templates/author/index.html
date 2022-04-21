@@ -4,79 +4,70 @@
  {% comment %} {% load media %} {% endcomment %}
     {% block content %}
 
-          <section class="blogEnt">
+  <section class="blogEnt">
         <div class="left">
-        <h1 class="headTitle">Here you can see all blogs of all users!!!!<h1>
-          <div class="blogs">
-          {% for dest in page_obj %}
+          <h1 class="headTitle">Here you can see all blogs of all users!!!!<h1>
+              <div class="blogs">
+               {% for dest in page_obj %}
 
-           <div class="blog-item">
-        <img src="media/{{ dest.img_url }}" alt="">
-        <span class="addition">
-        <h2> {{dest.title}} </h2>
-        </span>
-        <p>{{dest.description}}</p>
+                  <div class="blog-item">
+                      <img src="media/{{ dest.img_url }}" alt="">
+                      <span class="addition">
+                      <h2> {{dest.title}} </h2>
+                      </span>
+                      <p>{{dest.description}}</p>
 
-         <span class="users">
-            <i>
-                <img src="{% static "author/img/calendar.svg" %}" alt="">
-                {{dest.date}}
-            </i>
-             <i>
-               <!-- <img src="{% static "author/img/eye.svg" %}" alt="">
-               <p>21</p> -->
-        
-              </i>
-           <i>
-               <img src="{% static 'author/img/Shape.svg' %}" alt="">
-               <p></p>
-           </i> 
-           <i>
-            <img src="{% static 'author/img/like.png' %}" alt="">
-            <p>{{ dest.likes.count }}</p>
-        </i> 
-            <i>
-               <img src="{% static "author/img/Fill.svg" %}" alt="">
-               <p>{{ dest.category }}</p>
-           </i> 
-           <i>
-               <img src="{% static "author/img/Vector.svg" %}" alt="">
-               <a href="{% url 'profile' dest.author_id %}">{{ dest.author_id }}</a>
-           </i>
-            <i>
-                <img src="{% static 'author/img/saved.svg' %}">
-               <a href="{% url 'favorite_add' dest.id %}">Save</a>
-           </i>
-        </span>
-      </div>
+                      <span class="users">
+                            <i>
+                                <img src="{% static "author/img/calendar.svg" %}" alt="">
+                                {{dest.date}}
+                            </i>
+
+                            <i>
+                                <img src="{% static 'author/img/Shape.svg' %}" alt="">
+                                <p>{{dest.comments.count}}</p>
+                            </i> 
+
+                            <i>
+                              <img src="{% static "author/img/Fill.svg" %}" alt="">
+                              <p>{{ dest.category }}</p>
+                            </i> 
+
+                            <i>
+                                <img src="{% static "author/img/Vector.svg" %}" alt="">
+                                <a href="{% url 'profile' dest.author_id %}">{{ dest.author_id }}</a>
+                            </i>
+
+                            <i>
+                                <img src="{% static 'author/img/bookmark.png' %}">
+                                <a href="{% url 'favorite_add' dest.id %}">Save</a>
+                            </i>
+                      </span>
+                  </div>
+                {% endfor %}
+              </div>
+              <div class="pagination">
+                <span class="step-links">
+                    {% if page_obj.has_previous %}
+                      <a href="?page=1">&laquo; first</a>
+                      <a href="?page={{ page_obj.previous_page_number }}&category={{ dest.category }}">previous</a>
+                {% endif %}
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}&category={{ dest.category }}">next</a>
+                    <a href="?page={{ page_obj.paginator.num_pages }}&category={{ dest.category }}">last &raquo;</a>
+                {% endif %}
+            </span>
+        </div>
     </div>
-  
-        {% endfor %}
 
-        <div class="categories">
-          <h2>Category</h2>
-           {% for item in category %}
-             <a href="?category={{ item.name }}">{{ item.name }}</a>
-           {% endfor %}
+      <div class="categories">
+        <h2>Category</h2>
+          {% for item in category %}
+            <a href="?category={{ item.name }}">{{ item.name }}</a>
+          {% endfor %}
       </div>
-
-      
-     <div class="pagination">
-          <span class="step-links">
-              {% if page_obj.has_previous %}
-                <a href="?page=1">&laquo; first</a>
-                <a href="?page={{ page_obj.previous_page_number }}&category={{ dest.category }}">previous</a>
-           {% endif %}
-           {% if page_obj.has_next %}
-              <a href="?page={{ page_obj.next_page_number }}&category={{ dest.category }}">next</a>
-              <a href="?page={{ page_obj.paginator.num_pages }}&category={{ dest.category }}">last &raquo;</a>
-          {% endif %}
-      </span>
-  </div>
-       
-
-      
-    </section>
+ 
+  </section>
      {% endblock %}
  <script src="{% static "author/js/index.js" %}"></script>
 
