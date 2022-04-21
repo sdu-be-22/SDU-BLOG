@@ -21,9 +21,9 @@ from django.utils.decorators import method_decorator
 from django.views import View
 import os
 from django.contrib.auth import update_session_auth_hash
-
+from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-
+from django.views.decorators.csrf import csrf_exempt,csrf_protect, requires_csrf_token
 from .forms import *
 from .models import *
 from .utils import *
@@ -240,4 +240,51 @@ def change_password(request):
     return render(request, 'author/password_change.html', {
         'form': form
     })
+
+@csrf_exempt
+def liked_blog(request, id):
+    user=request.user
+    Like=False
+    blog = Blogs.objects.get(id=id)
+    if request.method=="POST":
+        post_id=request.POST['post_id']
+        get_blog=get_object_or_404(Blogs, id=post_id)
+    
+        if user in get_blog.liked.all():
+            get_blog.liked.remove(user)
+            Like=False
+        else:
+            get_blog.liked.add(user)
+            Like=True
+        data={
+            "lik":Like,
+            "likes_count":get_blog.liked.all().count()
+        }
+        return JsonResponse(data, safe=False)
+    return redirect(reverse('profile',blog.author_id))
+
+@csrf_exempt
+def dislike_blog(request, id):
+    user=request.user
+    Dislikes=False
+    
+    blog = Blogs.objects.get(id=id)
+    if request.method == "POST":
+        post_id=request.POST['post_id']
+        watch=get_object_or_404(Blogs, id=post_id)
+        if user in watch.disliked.all():
+            watch.disliked.remove(user)
+            Dislikes=False
+        else:
+            if user in watch.liked.all():
+                watch.liked.remove(user)
+            watch.disliked.add(user)
+            watch.save()
+            Dislikes=True
+        data={
+            "dislikes":Dislikes,
+            'dislike_count':watch.disliked.all().count()
+        }
+        return JsonResponse(data, safe=False)
+    return redirect(reverse('profile',blog.author_id))
 

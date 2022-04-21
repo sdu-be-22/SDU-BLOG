@@ -21,7 +21,8 @@ class Blogs(models.Model):
     author_id = models.ForeignKey(User, db_column="author_id", on_delete=models.CASCADE, null=True)
     date = models.DateTimeField(default=timezone.now)
     category = models.CharField(max_length=255, default='none')
-    likes = models.ManyToManyField(User, related_name='blogpost_like')
+    liked = models.ManyToManyField(User, related_name='liked')
+    disliked = models.ManyToManyField(User, related_name='disliked')
     blog_views = models.IntegerField(default=0, null=True)
     
     def number_of_likes(self):
